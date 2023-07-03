@@ -1,6 +1,8 @@
 package com.example.shop.service.impl;
 
 import com.example.shop.entity.Customer;
+import com.example.shop.exception.CustomerNotFoundException;
+import com.example.shop.exception.InvalidParameter;
 import com.example.shop.model.CustomerModel;
 import com.example.shop.repository.CustomerRepository;
 import com.example.shop.service.CustomerService;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -22,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean add(CustomerModel customerModel){
+    public boolean add(CustomerModel customerModel) {
         repository.save(mapper.map(customerModel, Customer.class));
         return true;
     }
@@ -34,28 +37,64 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean delete(int id){
-        repository.deleteById(id);
-        return true;
+    public boolean delete(int id) throws CustomerNotFoundException {
+        if (repository.findById(id).isPresent()) {
+            repository.deleteById(id);
+            return true;
+        } else {
+            throw new CustomerNotFoundException("customer not found with id : " + id);
+        }
     }
 
     @Override
-    public CustomerModel find(int id) {
+    public CustomerModel find(int id) throws CustomerNotFoundException {
         //find and return values from database
-        return mapper.map(repository.findById(id), CustomerModel.class);
+        Optional<Customer> byId = repository.findById(id);
+        if (byId.isPresent()) {
+            return mapper.map(repository.findById(id), CustomerModel.class);
+        } else {
+            throw new CustomerNotFoundException("customer not found with id: " + id);
+        }
     }
 
+    /**
+     * @return List<CustomerModel> list of customers
+     * @throws InvalidParameter,CustomerNotFoundException same as original method
+     */
+
     @Override
-    public List<CustomerModel> getAll() {
+    public List<CustomerModel> getAll() throws Exception {
+        return getAll(0, 10);
+    }
+
+    /**
+     * @param start start value
+     * @param end end value
+     * @return List<CustomerModel> list of customers
+     * @throws InvalidParameter,CustomerNotFoundException invalidParameter exception for when enter invalid data, CustomerNotFoundException for if their not customers
+     */
+    @Override
+    public List<CustomerModel> getAll(int start, int end) throws Exception {
         //empty array dedication
         List<CustomerModel> returnModel = new ArrayList<>();
-
+        // check parameter more than 0
+        if(start<=0){
+            throw new InvalidParameter("start: must enter grater than 0","int");
+        }
+        //check parameter grater than 0
+        if(end<0){
+            throw new InvalidParameter("end: must enter  0 or more","int");
+        }
         //get all customer and ready to return
         for (Customer c :
-                repository.findAll()) {
+                repository.getAll(start-1,end+1)) {
             returnModel.add(mapper.map(c, CustomerModel.class));
         }
-
-        return returnModel;
+        // check empty and throw exception
+        if (returnModel.isEmpty()) {
+            throw new CustomerNotFoundException("no customers to display");
+        } else {
+            return returnModel;
+        }
     }
 }
