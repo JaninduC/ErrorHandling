@@ -1,9 +1,9 @@
 package com.example.shop.advice;
 
 import com.example.shop.exception.CustomerNotFoundException;
-import com.example.shop.exception.InvalidParameter;
 import com.example.shop.model.error.ErrorModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,9 +18,9 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorModel HandleInvalidArgument(MethodArgumentNotValidException exception) {
         StringBuilder message = new StringBuilder();
-        exception.getBindingResult().getFieldErrors().forEach(fieldError -> {
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
             message.append(fieldError.getField()).append(" : ").append(fieldError.getDefaultMessage()).append(" | ");
-        });
+        }
         return new ErrorModel(HttpStatus.BAD_REQUEST.value(), message.toString());
     }
 
