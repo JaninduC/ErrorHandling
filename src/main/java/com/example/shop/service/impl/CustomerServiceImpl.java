@@ -9,9 +9,9 @@ import com.example.shop.service.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -69,32 +69,30 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * @param start start value
-     * @param end end value
+     * @param end   end value
      * @return List<CustomerModel> list of customers
      * @throws InvalidParameter,CustomerNotFoundException invalidParameter exception for when enter invalid data, CustomerNotFoundException for if their not customers
      */
     @Override
     public List<CustomerModel> getAll(int start, int end) throws Exception {
         //empty array dedication
-        List<CustomerModel> returnModel = new ArrayList<>();
+        List<Customer> returnModel = repository.getAll(start - 1, end + 1);
         // check parameter more than 0
-        if(start<=0){
-            throw new InvalidParameter("start: must enter grater than 0","int");
+        if (start <= 0) {
+            throw new InvalidParameter("start: must enter grater than 0", "int");
         }
         //check parameter grater than 0
-        if(end<0){
-            throw new InvalidParameter("end: must enter  0 or more","int");
-        }
-        //get all customer and ready to return
-        for (Customer c :
-                repository.getAll(start-1,end+1)) {
-            returnModel.add(mapper.map(c, CustomerModel.class));
+        if (end < 0) {
+            throw new InvalidParameter("end: must enter  0 or more", "int");
         }
         // check empty and throw exception
         if (returnModel.isEmpty()) {
             throw new CustomerNotFoundException("no customers to display");
-        } else {
-            return returnModel;
         }
+
+        return returnModel.stream()
+                .map(customer -> new ModelMapper()
+                        .map(customer, CustomerModel.class))
+                .collect(Collectors.toList());
     }
 }

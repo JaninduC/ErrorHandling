@@ -27,4 +27,5 @@ public class CustomerModel {
 
     @NotNull(message = "date of birth can't be null")
     private Date dob;
+
 }
