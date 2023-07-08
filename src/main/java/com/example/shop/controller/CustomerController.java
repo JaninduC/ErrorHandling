@@ -1,6 +1,6 @@
 package com.example.shop.controller;
 
-import com.example.shop.exception.CustomerNotFoundException;
+
 import com.example.shop.model.CustomerModel;
 import com.example.shop.service.CustomerService;
 import jakarta.validation.Valid;
@@ -35,12 +35,12 @@ public class CustomerController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deleteCustomer(@PathVariable("id") int id) throws CustomerNotFoundException {
+    public ResponseEntity<Object> deleteCustomer(@PathVariable("id") int id) throws Exception {
         return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> findCustomerById(@PathVariable("id") int id) throws CustomerNotFoundException {
+    public ResponseEntity<Object> findCustomerById(@PathVariable("id") int id) throws Exception {
         return new ResponseEntity<>(service.find(id), HttpStatus.OK);
     }
 

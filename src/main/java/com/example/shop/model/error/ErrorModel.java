@@ -7,7 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorModel {
     private int code;
     private String message;
+//    private Object result;
 }

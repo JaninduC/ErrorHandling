@@ -1,8 +1,8 @@
 package com.example.shop.service.impl;
 
 import com.example.shop.entity.Customer;
-import com.example.shop.exception.CustomerNotFoundException;
 import com.example.shop.exception.InvalidParameter;
+import com.example.shop.exception.NotFoundException;
 import com.example.shop.model.CustomerModel;
 import com.example.shop.repository.CustomerRepository;
 import com.example.shop.service.CustomerService;
@@ -37,29 +37,29 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean delete(int id) throws CustomerNotFoundException {
+    public boolean delete(int id) throws NotFoundException {
         if (repository.findById(id).isPresent()) {
             repository.deleteById(id);
             return true;
         } else {
-            throw new CustomerNotFoundException("customer not found with id : " + id);
+            throw new NotFoundException("customer not found with id : " + id);
         }
     }
 
     @Override
-    public CustomerModel find(int id) throws CustomerNotFoundException {
+    public CustomerModel find(int id) throws NotFoundException {
         //find and return values from database
         Optional<Customer> byId = repository.findById(id);
         if (byId.isPresent()) {
             return mapper.map(repository.findById(id), CustomerModel.class);
         } else {
-            throw new CustomerNotFoundException("customer not found with id: " + id);
+            throw new NotFoundException("customer not found with id: " + id);
         }
     }
 
     /**
      * @return List<CustomerModel> list of customers
-     * @throws InvalidParameter,CustomerNotFoundException same as original method
+     * @throws InvalidParameter,NotFoundException same as original method
      */
 
     @Override
@@ -71,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @param start start value
      * @param end   end value
      * @return List<CustomerModel> list of customers
-     * @throws InvalidParameter,CustomerNotFoundException invalidParameter exception for when enter invalid data, CustomerNotFoundException for if their not customers
+     * @throws InvalidParameter,NotFoundException invalidParameter exception for when enter invalid data, CustomerNotFoundException for if their not customers
      */
     @Override
     public List<CustomerModel> getAll(int start, int end) throws Exception {
@@ -87,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
         // check empty and throw exception
         if (returnModel.isEmpty()) {
-            throw new CustomerNotFoundException("no customers to display");
+            throw new NotFoundException("no customers to display");
         }
 
         return returnModel.stream()

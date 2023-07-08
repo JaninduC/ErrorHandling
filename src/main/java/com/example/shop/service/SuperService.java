@@ -1,7 +1,5 @@
 package com.example.shop.service;
 
-import com.example.shop.exception.CustomerNotFoundException;
-
 import java.util.List;
 
 public interface SuperService<T> {
@@ -9,9 +7,9 @@ public interface SuperService<T> {
 
      boolean update(T t) throws Exception;
 
-     boolean delete(int id) throws CustomerNotFoundException;
+     boolean delete(int id) throws Exception;
 
-     T find(int id) throws CustomerNotFoundException;
+     T find(int id) throws Exception;
 
      List<T> getAll(int start, int end) throws Exception;
 }

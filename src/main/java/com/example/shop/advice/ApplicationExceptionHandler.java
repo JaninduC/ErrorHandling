@@ -1,6 +1,6 @@
 package com.example.shop.advice;
 
-import com.example.shop.exception.CustomerNotFoundException;
+import com.example.shop.exception.NotFoundException;
 import com.example.shop.model.error.ErrorModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -25,8 +25,8 @@ public class ApplicationExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public ErrorModel HandleCustomerNotFoundException(CustomerNotFoundException exception) {
+    @ExceptionHandler(NotFoundException.class)
+    public ErrorModel HandleCustomerNotFoundException(NotFoundException exception) {
         return new ErrorModel(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
 

@@ -8,9 +8,9 @@ import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @ToString
+@Builder
 @Entity(name = "customer")
 public class Customer {
     @Id

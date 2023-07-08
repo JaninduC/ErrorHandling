@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @ToString
+@Builder
 public class CustomerModel {
     int id;
     @NotBlank(message = "name can't be null")
