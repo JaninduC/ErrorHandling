@@ -31,8 +31,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean update(CustomerModel customerModel) {
+    public boolean update(CustomerModel customerModel) throws Exception {
+        Optional<Customer> customerById = repository.findById(customerModel.getId());
+        if (customerById.isEmpty()) {
+            throw new NotFoundException("Customer not found. Id :" + customerModel.getId());
+        }
         repository.save(mapper.map(customerModel, Customer.class));
+
         return true;
     }
 

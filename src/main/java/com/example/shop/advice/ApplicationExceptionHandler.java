@@ -3,6 +3,7 @@ package com.example.shop.advice;
 import com.example.shop.exception.NotFoundException;
 import com.example.shop.model.error.ErrorModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -16,7 +17,7 @@ public class ApplicationExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorModel HandleInvalidArgument(MethodArgumentNotValidException exception) {
+    public ErrorModel handleInvalidArgument(MethodArgumentNotValidException exception) {
         StringBuilder message = new StringBuilder();
         for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
             message.append(fieldError.getField()).append(" : ").append(fieldError.getDefaultMessage()).append(" | ");
@@ -26,25 +27,31 @@ public class ApplicationExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ErrorModel HandleCustomerNotFoundException(NotFoundException exception) {
+    public ErrorModel handleCustomerNotFoundException(NotFoundException exception) {
         return new ErrorModel(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ErrorModel HandleSuperAllExceptions(Exception exception) {
+    public ErrorModel handleSuperAllExceptions(Exception exception) {
         return new ErrorModel(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ErrorModel HandleInvalidParameter(MissingServletRequestParameterException exception){
-        return new ErrorModel(HttpStatus.BAD_REQUEST.value(),exception.getMessage());
+    public ErrorModel handleInvalidParameter(MissingServletRequestParameterException exception) {
+        return new ErrorModel(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ErrorModel HandleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception){
+    public ErrorModel handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         return new ErrorModel(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorModel handleAccessDeniedException(AccessDeniedException exception) {
+        return new ErrorModel(HttpStatus.FORBIDDEN.value(), exception.getMessage());
     }
 }

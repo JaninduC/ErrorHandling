@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -44,4 +45,15 @@ public class CustomerController {
         return new ResponseEntity<>(service.find(id), HttpStatus.OK);
     }
 
+    @GetMapping("/admin")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String admin() {
+        return "<h1> Hi Admin ! </h1>";
+    }
+
+    @GetMapping("/user")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public String user() {
+        return "<h1> Hi User ! </h1>";
+    }
 }

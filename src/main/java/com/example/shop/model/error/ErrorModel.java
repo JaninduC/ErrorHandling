@@ -11,5 +11,5 @@ import lombok.*;
 public class ErrorModel {
     private int code;
     private String message;
-//    private Object result;
+
 }

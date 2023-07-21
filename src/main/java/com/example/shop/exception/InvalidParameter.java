@@ -5,7 +5,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 
 public class InvalidParameter extends MissingServletRequestParameterException {
 
-    private final String parameterName, parameterType;
+    private final String parameterName;
+    private final String parameterType;
 
     public InvalidParameter(String parameterName, String parameterType) {
         super(parameterName, parameterType);
