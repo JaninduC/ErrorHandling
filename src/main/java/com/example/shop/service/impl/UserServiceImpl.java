@@ -8,24 +8,31 @@ import com.example.shop.service.UserService;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-
 @NoArgsConstructor
+@Primary
 public class UserServiceImpl implements UserService, UserDetailsService {
+
     @Autowired
     private UserRepository repository;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public boolean add(UserModel userModel) throws Exception {
@@ -63,18 +70,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<UserModel> getAll(int start, int end) throws Exception {
-        return null;
+
+        return new ArrayList<>();
     }
 
     @Override
-    public boolean changePassword(int userId, String oldPassword, String newPassword) throws Exception {
-        return false;
+    public boolean changePassword(int userId, String oldPassword, String newPassword) {
+        throw new RuntimeException("we");
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userByUsername = repository.getUserByUsername(username);
         return userByUsername.map(UserDetailsImpl::new).orElseThrow((() -> new UsernameNotFoundException("user not found " + username)));
-
     }
 }

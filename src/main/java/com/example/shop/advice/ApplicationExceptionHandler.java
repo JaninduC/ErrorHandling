@@ -1,9 +1,11 @@
 package com.example.shop.advice;
 
+import com.example.shop.exception.InvalidRefreshToken;
 import com.example.shop.exception.NotFoundException;
 import com.example.shop.model.error.ErrorModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -54,4 +56,17 @@ public class ApplicationExceptionHandler {
     public ErrorModel handleAccessDeniedException(AccessDeniedException exception) {
         return new ErrorModel(HttpStatus.FORBIDDEN.value(), exception.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ErrorModel handleInvalidUsernameOrPasswordException(BadCredentialsException exception) {
+        return new ErrorModel(HttpStatus.FORBIDDEN.value(), exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(InvalidRefreshToken.class)
+    public ErrorModel handleInvalidUsernameOrPasswordException(InvalidRefreshToken exception) {
+        return new ErrorModel(HttpStatus.FORBIDDEN.value(), exception.getMessage());
+    }
+
 }
