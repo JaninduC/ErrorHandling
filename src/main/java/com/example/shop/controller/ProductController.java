@@ -2,6 +2,7 @@ package com.example.shop.controller;
 
 import com.example.shop.model.ProductModel;
 import com.example.shop.service.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/product")
 @CrossOrigin
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ProductController {
     private ProductService productService;
 
@@ -29,17 +31,17 @@ public class ProductController {
     }
 
     @PutMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> SaveProduct(@RequestBody @Valid ProductModel model) throws Exception {
+    public ResponseEntity<Boolean> saveProduct(@RequestBody @Valid ProductModel model) throws Exception {
         return new ResponseEntity<>(productService.add(model), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> UpdateProduct(@RequestBody @Valid ProductModel model) throws Exception {
+    public ResponseEntity<Boolean> spdateProduct(@RequestBody @Valid ProductModel model) throws Exception {
         return new ResponseEntity<>(productService.update(model), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> DeleteProductById(@PathVariable("id") int id) throws Exception {
+    public ResponseEntity<Boolean> selectProductById(@PathVariable("id") int id) throws Exception {
         return new ResponseEntity<>(productService.delete(id), HttpStatus.OK);
     }
 }

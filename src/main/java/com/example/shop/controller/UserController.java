@@ -3,6 +3,7 @@ package com.example.shop.controller;
 
 import com.example.shop.model.UserModel;
 import com.example.shop.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 @CrossOrigin
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class UserController {
     private UserService service;
 

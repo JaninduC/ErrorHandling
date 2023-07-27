@@ -3,6 +3,7 @@ package com.example.shop.controller;
 import com.example.shop.model.OrderModel;
 import com.example.shop.service.OrderService;
 import com.example.shop.service.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/order")
 @CrossOrigin
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class OrderController {
 
     private OrderService orderService;
